@@ -67,12 +67,30 @@ export function convert(str) {
         // Return the corresponding array from the lookup map, wrapped in another array
         return [lookup.get(c)];  // Wrap in an array to maintain the structure
     }
+    const result = str.match(/[a-zA-Z]+|\d+/g).map(item => isNaN(item) ? item : Number(item));
+
+    let out = [];
+    for (let item of result) {
+        
+        //check if its a number between 9 and 100
+        if (!isNaN(item) && item >=9 && item < 100) {
+
+            const tens = Math.floor(item / 10).toString()
+            const ones = (item % 10).toString()
+
+            out.push([[lookup.get(ones)[0], lookup.get(tens)[0]]])
+            continue;
+        }
+
+        item = item.toString()
+
+        for (const char of item) {
+            out.push(convert(char));  // Each character conversion returns an array
+        }
+    }
 
     // For multi-character strings
-    let out = [];
-    for (const char of str) {
-        out.push(convert(char));  // Each character conversion returns an array
-    }
+
     return out;  // Returns an array of arrays
 }
 
