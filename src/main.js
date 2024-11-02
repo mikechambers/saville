@@ -1,11 +1,22 @@
 import {generateSVG} from "./lib/saville.js";
 
 const init = function() {
-  console.log("hi")
-  let svg = generateSVG("fact75");
-  
+
   let container = document.getElementById("svg-containter")
-  container.append(svg)
+
+  const inputField = document.getElementById('input_field');
+
+  inputField.addEventListener('input', function(event) {
+
+      let svg = generateSVG(event.target.value);
+
+      container.innerHTML = '';
+
+      container.append(svg)
+  });
+
+  
+  
 
 };
 

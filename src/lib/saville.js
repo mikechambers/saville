@@ -55,21 +55,24 @@ const lookup = new Map([
 //unknown chars return colors.white
 export function convert(str) {
 
+    let out = [];
     // Base case for single character input
     if (str.length === 1) {
         let c = str.toLowerCase();  // Convert to lowercase
 
         // If character not found in lookup, return an array containing colors.white
         if (!lookup.has(c)) {
-            return [[colors.white]];  // Wrap in an additional array
+            out.push([colors.white])
+              // Wrap in an additional array
+        } else {
+            out.push([lookup.get(c)])
         }
-        
-        // Return the corresponding array from the lookup map, wrapped in another array
-        return [lookup.get(c)];  // Wrap in an array to maintain the structure
+
+        return out;  // Wrap in an array to maintain the structure
     }
     const result = str.match(/[a-zA-Z]+|\d+/g).map(item => isNaN(item) ? item : Number(item));
 
-    let out = [];
+    
     for (let item of result) {
         
         //check if its a number between 9 and 100
@@ -85,7 +88,8 @@ export function convert(str) {
         item = item.toString()
 
         for (const char of item) {
-            out.push(convert(char));  // Each character conversion returns an array
+  
+            out.push(convert(char)[0]);  // Each character conversion returns an array
         }
     }
 
@@ -96,7 +100,7 @@ export function convert(str) {
 
 export function generateSVG(str, width = 1000, height = 500) {
     let colors = convert(str);
-
+console.log(colors)
     let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("width", width);
     svg.setAttribute("height", height);
