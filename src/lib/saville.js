@@ -56,6 +56,11 @@ const lookup = new Map([
 export function convert(str) {
 
     let out = [];
+
+    if(!str) {
+        return out
+    }
+
     // Base case for single character input
     if (str.length === 1) {
         let c = str.toLowerCase();  // Convert to lowercase
@@ -70,7 +75,8 @@ export function convert(str) {
 
         return out;  // Wrap in an array to maintain the structure
     }
-    const result = str.match(/[a-zA-Z]+|\d+/g).map(item => isNaN(item) ? item : Number(item));
+    //const result = str.match(/[a-zA-Z]+|\d+/g).map(item => isNaN(item) ? item : Number(item));
+    const result = str.match(/[a-zA-Z]+|\d+|\r?\n/g).map(item => (isNaN(item) || item === '\n' || item === '\r\n') ? item : Number(item));
 
     
     for (let item of result) {
@@ -86,9 +92,15 @@ export function convert(str) {
         }
 
         item = item.toString()
+        
 
         for (const char of item) {
-  
+
+            if(char == '\n') {
+                out.push(null)
+                continue;
+            }
+
             out.push(convert(char)[0]);  // Each character conversion returns an array
         }
     }
@@ -100,7 +112,7 @@ export function convert(str) {
 
 export function generateSVG(str, width = 1000, height = 500) {
     let colors = convert(str);
-console.log(colors)
+
     let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("width", width);
     svg.setAttribute("height", height);
@@ -111,22 +123,37 @@ console.log(colors)
         svg.appendChild(defs);
     }
     
+    let gradientHash = new Map()
+
     const padding = 5
     const size = 50
+    let row = 0
+    let col = 0
     for (let i = 0; i < colors.length; i++) {
+
+        if (!colors[i]) {
+            row++
+            col = 0
+            continue;
+        }
+
         const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
         rect.setAttribute("height", size);
         rect.setAttribute("width", size);
-        rect.setAttribute("x", (i * size) + padding * i)
+        rect.setAttribute("x", (col * size) + padding * col)
+        rect.setAttribute("y", (row * size) + padding * row)
 
         let gradientId = `gradient_${i}`;
-        let gradient = createGradient(gradientId, colors[i][0])
-
-        //set def by char
         rect.setAttribute('fill', `url(#${gradientId})`);
-        defs.appendChild(gradient);
+
+        if (!gradientHash.has(gradientId)) {
+            let gradient = createGradient(gradientId, colors[i][0])
+            defs.appendChild(gradient);
+            gradientHash.set(gradientId, true)
+        }
 
         svg.appendChild(rect)
+        col++
     }
 
     return svg

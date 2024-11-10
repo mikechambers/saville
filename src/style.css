@@ -1,6 +1,5 @@
 svg {
     stroke: rgb(25, 23, 24);
     stroke-width: 1;
-    filter: saturate(0.8);
-    filter: hue-rotate(270deg);
+    filter: saturate(100%);
   }
