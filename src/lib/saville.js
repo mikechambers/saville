@@ -110,12 +110,25 @@ export function convert(str) {
     return out;  // Returns an array of arrays
 }
 
-export function generateSVG(str, width = 1000, height = 500) {
+export function generateSVG(str, outline, width = 1000, height = 500) {
     let colors = convert(str);
 
     let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("width", width);
     svg.setAttribute("height", height);
+
+    if(outline) {
+        const style = document.createElement("style");
+        style.textContent = `
+        rect {
+            stroke: rgb(25, 23, 24);
+            stroke-width: 1;
+        }
+        `;
+        
+        // Append the style element to the SVG
+        svg.appendChild(style);
+    }
 
     let defs = svg.querySelector('defs');
     if (!defs) {

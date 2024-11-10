@@ -5,19 +5,19 @@ const init = function() {
   let container = document.getElementById("svg-containter")
 
   const inputField = document.getElementById('input_field');
+  const checkbox = document.getElementById('outline_cb');
 
-  inputField.addEventListener('input', function(event) {
+  let f = function(event) {
 
-      let svg = generateSVG(event.target.value);
+    let svg = generateSVG(inputField.value, checkbox.checked);
 
-      container.innerHTML = '';
+    container.innerHTML = '';
 
-      container.append(svg)
-  });
+    container.append(svg)
+  }
 
-  
-  
-
+  checkbox.addEventListener('change', f);
+  inputField.addEventListener('input', f);
 };
 
 window.onload = function() {
