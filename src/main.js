@@ -2,7 +2,7 @@ import {generateSVG} from "./lib/saville.js";
 
 const init = function() {
 
-  let container = document.getElementById("svg-containter")
+  let container = document.getElementById("svg-container")
 
   const inputField = document.getElementById('input_field');
   const checkbox = document.getElementById('outline_cb');
