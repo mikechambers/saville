@@ -110,7 +110,7 @@ export function convert(str) {
     return out;  // Returns an array of arrays
 }
 
-export function generateSVG(str, outline, width = 800, height = 300) {
+export function generateSVG(str, outline, width = 500, height = 300) {
     let colors = convert(str);
 
     let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");

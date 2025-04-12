@@ -1,0 +1,7 @@
+#svg-container {
+    border: 2px solid #33333333;
+    padding: 2px;
+    min-width: 500px;
+    min-height: 100px;
+    width: fit-content;
+}
